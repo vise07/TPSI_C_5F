@@ -1,0 +1,173 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void visualizzaArray(int arr[], int n) {
+	printf("Array: ");
+	for (int i = 0; i < n; i++) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+
+void visualizzaNumeriPari(int arr[], int n) {
+	printf("Numeri pari: ");
+	for (int i = 0; i < n; i++) {
+		if (arr[i] % 2 == 0) {
+			printf("%d ", arr[i]);
+		}
+	}
+	printf("\n");
+}
+
+void visualizzaNumeriDispari(int arr[], int n) {
+	printf("Numeri dispari: ");
+	for (int i = 0; i < n; i++) {
+		if (arr[i] % 2 != 0) {
+			printf("%d ", arr[i]);
+		}
+	}
+	printf("\n");
+}
+
+void sommaEMedia(int arr[], int n) {
+	int somma = 0;
+	for (int i = 0; i < n; i++) {
+		somma += arr[i];
+	}
+	printf("Somma: %d\n", somma);
+	printf("Media: %.2f\n", (float)somma / n);
+}
+
+void visualizzaArrayInvertito(int arr[], int n) {
+	printf("Array invertito: ");
+	for (int i = n - 1; i >= 0; i--) {
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+
+void ricercaElemento(int arr[], int n, int elemento) {
+	int trovato = 0;
+	for (int i = 0; i < n; i++) {
+		if (arr[i] == elemento) {
+			printf("Elemento %d trovato alla posizione %d.\n", elemento, i);
+			trovato = 1;
+			break;
+		}
+	}
+	if (!trovato) {
+		printf("Elemento %d non trovato nell'array.\n", elemento);
+	}
+}
+
+void eliminaElemento(int arr[], int *n, int elemento) {
+	int trovato = 0;
+	for (int i = 0; i < *n; i++) {
+		if (arr[i] == elemento) {
+			for (int j = i; j < *n - 1; j++) {
+				arr[j] = arr[j + 1];
+			}
+			(*n)--;
+			printf("Elemento %d eliminato.\n", elemento);
+			trovato = 1;
+			break;
+		}
+	}
+	if (!trovato) {
+		printf("Elemento %d non trovato nell'array.\n", elemento);
+	}
+}
+
+void alternaElementi(int arr[], int n) {
+	for (int i = 0; i < n - 1; i += 2) {
+		int temp = arr[i];
+		arr[i] = arr[i + 1];
+		arr[i + 1] = temp;
+	}
+}
+
+void ordinaArray(int arr[], int n) {
+	for (int i = 0; i < n - 1; i++) {
+		for (int j = 0; j < n - i - 1; j++) {
+			if (arr[j] > arr[j + 1]) {
+				int temp = arr[j];
+				arr[j] = arr[j + 1];
+				arr[j + 1] = temp;
+			}
+		}
+	}
+	printf("Array ordinato.\n");
+}
+
+int main() {
+	int scelta, n;
+
+	printf("Inserisci la dimensione dell'array: ");
+	scanf("%d", &n);
+
+	int arr[n];
+
+	for (int i = 0; i < n; i++) {
+		arr[i] = rand() % 100 + 1;
+	}
+
+	do {
+		printf("1 Visualizza array\n");
+		printf("2 Visualizza array invertito\n");
+		printf("3 Somma e media degli elementi\n");
+		printf("4 Visualizza numeri pari\n");
+		printf("5 Visualizza numeri dispari\n");
+		printf("6 Ricerca un numero\n");
+		printf("7 Elimina un elemento\n");
+		printf("8 Alterna le posizioni\n");
+		printf("9 Ordina l'array\n");
+		printf("0 Esci\n");
+		scanf("%d", &scelta);
+
+		switch (scelta) {
+		case 1:
+			visualizzaArray(arr, n);
+			break;
+		case 2:
+			visualizzaArrayInvertito(arr, n);
+			break;
+		case 3:
+			sommaEMedia(arr, n);
+			break;
+		case 4:
+			visualizzaNumeriPari(arr, n);
+			break;
+		case 5:
+			visualizzaNumeriDispari(arr, n);
+			break;
+		case 6: {
+			int num;
+			printf("Inserisci il numero da cercare: ");
+			scanf("%d", &num);
+			ricercaElemento(arr, n, num);
+			break;
+		}
+		case 7: {
+			int num;
+			printf("Inserisci il numero da eliminare: ");
+			scanf("%d", &num);
+			eliminaElemento(arr, &n, num);
+			break;
+		}
+		case 8:
+			alternaElementi(arr, n);
+			break;
+		case 9:
+			ordinaArray(arr, n);
+			break;
+		case 0:
+			printf("Uscita in corso...\n");
+			break;
+		default:
+			printf("Scelta non valida!\n");
+			break;
+		}
+	} while (scelta != 0);
+
+	return 0;
+}
