@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
+
+#define dim 100
+
+bool verificaLettere(char stringa[]) {
+	for(int i = 0; i < strlen(stringa); i++) {
+		if(!((stringa[i] >= 'A' && stringa[i] <= 'Z') || (stringa[i] >= 'a' && stringa[i] <= 'z'))) {
+			return false;
+		}
+	}
+	return true;
+}
+
+int contaLettera(char stringa[], char lettera) {
+    int cont = 0;
+    for(int i = 0; i < strlen(stringa); i++) {
+        if(stringa[i] == lettera) {
+            cont++;
+        }
+    }
+    return cont;
+}
+
+void PariDispari(char stringa[], char *stringaPari, char *stringaDispari) {
+    int p = 0, d = 0;
+    for(int i = 0; i < strlen(stringa); i++) {
+        if(i % 2 == 0) {
+            stringaPari[p++] = stringa[i];
+        } else {
+            stringaDispari[d++] = stringa[i];
+        }
+    }
+}
+
+bool verificaDoppie(char stringa []) {
+    for(int i = 0; i < strlen(stringa) - 1; i++) {
+        for(int j = i + 1; j < strlen(stringa); j++) {
+            if(stringa[i] == stringa[j]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void contaVocaliConsonanti(char stringa[], char stringa2[], int *contV1, int *contC1, int *contV2, int *contC2) {
+    for(int i = 0; i < strlen(stringa); i++) {
+        char c = tolower(stringa[i]);
+        if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            (*contV1)++;
+        } else {
+            (*contC1)++;
+        }
+    }
+    
+    for(int i = 0; i < strlen(stringa2); i++) {
+        char c = tolower(stringa2[i]);
+        if(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
+            (*contV2)++;
+        } else {
+            (*contC2)++;
+        }
+    }
+}
+
+int caratteriUguali(char stringa[], char stringa2[]) {
+    int val = 0;
+    for(int i = 0; i < strlen(stringa); i++) {
+        for(int j = 0; j < strlen(stringa2); j++) {
+            if(stringa[i] == stringa2[j]) {
+                printf("%c\n", stringa[i]);
+                val =  1;
+            }
+        }
+    }
+    return val;
+}
+
+int main() {
+
+	char stringa[dim];
+	char stringaPari[dim];
+	char stringaDispari[dim];
+	char stringa2[dim];
+	char lettera;
+	int contV1 = 0;
+	int contC1 = 0;
+	int contV2 = 0;
+	int contC2 = 0;
+
+	printf("Inserisci una stringa: ");
+	scanf("%s", stringa);
+
+	if(verificaLettere(stringa)) {
+		printf("La stringa e' composta solo da lettere.\n");
+	} else {
+		printf("La stringa NON e' composta solo da lettere.\n");
+	}
+	
+	printf("\nScegli una lettera da cercare nella stringa: ");
+	scanf(" %c", &lettera);
+	
+	printf("La lettera %c è presente %d volte nella stringa.\n", lettera, contaLettera(stringa, lettera));
+
+    PariDispari(stringa, stringaPari, stringaDispari);
+
+    printf("\nStringa di lettere in posizioni pari: %s\n", stringaPari);
+    
+    printf("Stringa di lettere in posizioni dispari: %s\n", stringaDispari);
+
+    if(verificaDoppie(stringa)) {
+        printf("\nLa stringa contiene delle doppie.\n");
+    } else {
+        printf("\nLa stringa NON contiene delle doppie.\n");
+    }
+    
+    printf("Inserisci una seconda stringa: ");
+	scanf("%s", stringa2);
+	
+	printf("\n");
+	
+	if(strlen(stringa) > strlen(stringa2)) {
+	    printf("La prima stringa e' piu' lunga della seconda.\n");
+	} else if(strlen(stringa) < strlen(stringa2)) {
+	    printf("La seconda stringa e' piu' lunga della prima.\n");
+	} else if(strlen(stringa) == strlen(stringa2)) {
+	    printf("Le stringhe hanno la stessa lunghezza.\n");
+	}
+    
+    contaVocaliConsonanti(stringa, stringa2, &contV1, &contC1, &contV2, &contC2);
+    
+    if(contV1 > contV2) {
+        printf("La prima stringa contiene piu' vocali.\n");
+    } else if(contV1 < contV2) {
+        printf("La seconda stringa contiene piu' vocali.\n");
+    } else {
+        printf("Le stringhe contengono lo stesso numero di vocali.\n");
+    }
+    
+    if(contC1 > contC2) {
+        printf("La prima stringa contiene piu' consonanti.\n");
+    } else if(contC1 < contC2) {
+        printf("La seconda stringa contiene piu' consonanti.\n");
+    } else {
+        printf("Le stringhe contengono lo stesso numero di consonanti.\n");
+    }
+    
+    printf("\n");
+    
+    if(caratteriUguali(stringa, stringa2) == 0) {
+        printf("Le stringhe NON hanno lettere in comune.\n");
+    }
+
+	return 0;
+}
