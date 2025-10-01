@@ -99,22 +99,7 @@ public class Main {
 
                     case 7 -> {
                         if (!frase.isEmpty()) {
-                            try {
-                                System.out.print("Inserisci indice iniziale: ");
-                                int inizio = Integer.parseInt(sc.nextLine());
-
-                                System.out.print("Inserisci indice finale: ");
-                                int fine = Integer.parseInt(sc.nextLine());
-
-                                if (inizio >= 0 && fine <= frase.length() && inizio < fine) {
-                                    String porzione = frase.substring(inizio, fine);
-                                    System.out.println("Porzione estratta: " + porzione);
-                                } else {
-                                    System.out.println("Indici non validi.");
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Errore durante l'estrazione della sottostringa.");
-                            }
+                            System.out.println("Estrazione frase.");
                         } else {
                             System.out.println("Nessuna frase inserita.");
                         }
