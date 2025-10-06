@@ -4,8 +4,9 @@ import static utility.Tools.*;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        GestoreTesti gestore = new GestoreTesti();
 
-        String[] opzioni = {"MENU", "Inserisci nuova frase", "Mostra lunghezza della frase", "Verifica presenza parola", "Sostituisci parola", "Conta vocali e consonanti", "Inverti frase", "Estrai porzione di frase", "Esci"};
+        String[] opzioni = {"MENU", "Inserisci nuova frase", "Mostra lunghezza frase", "Verifica presenza parola", "Sostituisci parola", "Conta vocali e consonanti", "Inverti frase", "Estrai porzione di frase", "Esci"};
         String frase = "";
         boolean continua = true;
         int scelta;
@@ -19,7 +20,7 @@ public class Main {
                     case 1 -> {
                         System.out.print("Inserisci una nuova frase: ");
                         frase = sc.nextLine();
-                        System.out.println("Frase aggiornata!");
+                        System.out.println("Frase aggiornata.");
                     }
 
                     case 2 -> {
@@ -36,6 +37,7 @@ public class Main {
                             String parola = sc.nextLine();
 
                             boolean trovata = frase.toLowerCase().contains(parola.toLowerCase());
+
                             if(trovata) {
                                 System.out.println("Parola trovata.");
                             } else {
@@ -53,12 +55,12 @@ public class Main {
                     case 4 -> {
                         if (!frase.isEmpty()) {
                             System.out.print("Inserisci la parola da sostituire: ");
-                            String daSostituire = sc.nextLine();
+                            String parolaDaSostituire = sc.nextLine();
 
                             System.out.print("Inserisci la nuova parola: ");
                             String nuova = sc.nextLine();
 
-                            frase = frase.replaceAll(daSostituire, nuova);
+                            frase = frase.replaceAll(parolaDaSostituire, nuova);
                             System.out.println("Parola sostituita.");
 
                         } else {
@@ -68,21 +70,13 @@ public class Main {
 
                     case 5 -> {
                         if (!frase.isEmpty()) {
-                            int vocali = 0, consonanti = 0;
+
                             String fraseMinuscola = frase.toLowerCase();
 
-                            for (char c : fraseMinuscola.toCharArray()) {
-                                if (Character.isLetter(c)) {
-                                    if (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u') {
-                                        vocali++;
-                                    } else {
-                                        consonanti++;
-                                    }
-                                }
-                            }
+                            int[] vocaliConsonanti = gestore.contaVocaliConsonanti(fraseMinuscola);
 
-                            System.out.println("Numero vocali: " + vocali);
-                            System.out.println("Numero consonanti: " + consonanti);
+                            System.out.println("Numero vocali: " + vocaliConsonanti[0]);
+                            System.out.println("Numero consonanti: " + vocaliConsonanti[1]);
                         } else {
                             System.out.println("Nessuna frase inserita.");
                         }
