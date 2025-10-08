@@ -1,0 +1,283 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STR 50
+#define MAX_AUTO 100
+
+// Modello struct Auto
+struct Auto {
+    char modello[MAX_STR];
+    char marca[MAX_STR];
+    int cilindrata;
+    float prezzo;
+    int anno_immatricolazione;
+    char targa[MAX_STR];
+};
+
+// Metodo per mostrare il Menu
+void mostraMenu() {
+    printf("-----MENU-----\n");
+    printf("1 Inserisci auto\n");
+    printf("2 Visualizzazione Prezzo massimo e minimo\n");
+    printf("3 Ordina auto per anno di immatricolazione\n");
+    printf("4 Visualizza auto per prezzo minimo\n");
+    printf("5 Cerca auto per targa\n");
+    printf("6 Media prezzi\n");
+    printf("7 Visualizza auto per anno di immatricolazione\n");
+    printf("8 Esci\n");
+}
+
+// 1 Metodo per inserire un Auto
+void inserisciAuto(struct Auto lista[], int *n) {
+
+    // Controllo capienza auto
+    if (*n >= MAX_AUTO) {
+        printf("Limite massimo di auto raggiunto.\n");
+        return;
+    }
+
+    // Inserimento dati Auto
+    printf("Inserisci i dati dell'auto %d:\n", *n + 1);
+
+    printf("Modello: ");
+    scanf("%s", lista[*n].modello);
+
+    printf("Marca: ");
+    scanf("%s", lista[*n].marca);
+
+    printf("Cilindrata: ");
+    scanf("%d", &lista[*n].cilindrata);
+
+    printf("Prezzo: ");
+    scanf("%f", &lista[*n].prezzo);
+
+    printf("Anno immatricolazione: ");
+    scanf("%d", &lista[*n].anno_immatricolazione);
+
+    printf("Targa: ");
+    scanf("%s", lista[*n].targa);
+
+    (*n)++;
+    printf("Auto inserita correttamente.\n");
+}
+
+// 2 Metodo per visualizzare le Auto col prezzo piu' basso e quello piu' alto
+void visualizzaPrezzoMaxMin(struct Auto lista[], int n) {
+    if (n == 0) {
+        printf("Lista auto vuota.\n");
+        return;
+    }
+
+    int posMax = 0, posMin = 0;
+
+    for (int i = 1; i < n; i++) {
+        if (lista[i].prezzo > lista[posMax].prezzo) {
+            posMax = i;
+        }
+        if (lista[i].prezzo < lista[posMin].prezzo) {
+            posMin = i;
+        }
+    }
+
+    printf("Prezzo massimo: %.2f (Modello: %s)\n", lista[posMax].prezzo, lista[posMax].modello);
+    printf("Prezzo minimo: %.2f (Modello: %s)\n", lista[posMin].prezzo, lista[posMin].modello);
+}
+
+// 3 Metodo per ordinare le Auto per anno di immatricolazione
+void ordinaAutoPerAnno(struct Auto lista[], int n) {
+    struct Auto temp;
+
+    // Ordinamento con bubble-sort
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (lista[j].anno_immatricolazione > lista[j + 1].anno_immatricolazione) {
+                temp = lista[j];
+                lista[j] = lista[j + 1];
+                lista[j + 1] = temp;
+            }
+        }
+    }
+
+    printf("Auto ordinate per anno di immatricolazione:\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s %s - Anno: %d\n", lista[i].modello, lista[i].marca, lista[i].anno_immatricolazione);
+    }
+}
+
+// 4 Metodo per visualizzare le Auto con il prezzo minimo
+void visualizzaAutoPrezzoMinimo(struct Auto lista[], int n, float prezzoMin) {
+    int trovate = 0;
+
+    printf("Auto con prezzo >= %.2f:\n", prezzoMin);
+
+    for (int i = 0; i < n; i++) {
+        if (lista[i].prezzo >= prezzoMin) {
+            printf("%s %s - Prezzo: %.2f\n", lista[i].modello, lista[i].marca, lista[i].prezzo);
+            trovate++;
+        }
+    }
+    if (trovate == 0) {
+        printf("Nessuna auto trovata con prezzo >= %.2f\n", prezzoMin);
+    }
+}
+
+// 5 Metodo per cercare un auto per targa
+void cercaAutoPerTarga(struct Auto lista[], int n, char targa[]) {
+    int trovata = 0;
+
+    for (int i = 0; i < n; i++) {
+        // Controllo che le due stringhe corrispondano
+        if (strcmp(lista[i].targa, targa) == 0) {
+            printf("Auto trovata:\n");
+            printf("Modello: %s\n", lista[i].modello);
+            printf("Marca: %s\n", lista[i].marca);
+            printf("Cilindrata: %d\n", lista[i].cilindrata);
+            printf("Prezzo: %.2f\n", lista[i].prezzo);
+            printf("Anno immatricolazione: %d\n", lista[i].anno_immatricolazione);
+            printf("Targa: %s\n", lista[i].targa);
+            trovata = 1;
+            break;
+        }
+    }
+    if (!trovata) {
+        printf("Auto con targa %s non trovata.\n", targa);
+    }
+}
+
+// 6 Metodo che mmostra la media dei prezzi delle auto
+void mediaPrezzi(struct Auto lista[], int n) {
+    if (n == 0) {
+        printf("Lista auto vuota.\n");
+        return;
+    }
+
+    float somma = 0;
+    for (int i = 0; i < n; i++) {
+        somma += lista[i].prezzo;
+    }
+    float media = somma / n;
+    printf("La media dei prezzi è: %.2f\n", media);
+}
+
+// 7 Metodo per visualizzare le Auto per anno di immatricolazione
+void visualizzaAutoPerAnno(struct Auto lista[], int n, int anno) {
+    int trovate = 0;
+    printf("Auto immatricolate nell'anno %d:\n", anno);
+
+    for (int i = 0; i < n; i++) {
+        if (lista[i].anno_immatricolazione == anno) {
+            printf("%s %s - Targa: %s - Prezzo: %.2f\n", lista[i].modello, lista[i].marca, lista[i].targa, lista[i].prezzo);
+            trovate++;
+        }
+    }
+
+    if (trovate == 0) {
+        printf("Nessuna auto trovata per l'anno %d.\n", anno);
+    }
+}
+
+
+
+// Main
+int main() {
+
+    struct Auto lista[MAX_AUTO];
+    int n = 0;
+    int scelta;
+    int uscita = 0;
+
+    // Ciclo do-while per ripresentare il menu fino all'uscita del programma
+    do {
+
+        mostraMenu();
+        scanf("%d", &scelta);
+
+        // Switch case per opzioni Menu
+        switch(scelta) {
+
+            // Inserimento Auto
+            case 1:
+            inserisciAuto(lista, &n);
+            break;
+
+            // Visualizzazione Auto per prezzo massimo e minimo, mostrando anche il modello
+            case 2:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    visualizzaPrezzoMaxMin(lista, n);
+                }
+            break;
+
+            // Ordinamento Auto per anno di immatricolazione
+            case 3:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    ordinaAutoPerAnno(lista, n);
+                }
+            break;
+
+            // Visualizzazione Auto per prezzo minimo
+            case 4:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    float prezzoMin;
+                    printf("Inserisci il prezzo minimo: ");
+                    scanf("%f", &prezzoMin);
+                    visualizzaAutoPrezzoMinimo(lista, n, prezzoMin);
+                }
+            break;
+
+            // Cerca Auto per targa
+            case 5:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    char targaRicerca[MAX_STR];
+                    printf("Inserisci la targa da cercare: ");
+                    scanf("%s", targaRicerca);
+                    cercaAutoPerTarga(lista, n, targaRicerca);
+                }
+            break;
+
+            // Visualizzazione della media prezzi delle Auto
+            case 6:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    mediaPrezzi(lista, n);
+                }
+            break;
+
+            // Visualizzazione Auto per anno di immatricolazione
+            case 7:
+                if (n == 0) {
+                    printf("Lista auto vuota.\n");
+                } else {
+                    int anno;
+                    printf("Inserisci l'anno di immatricolazione: ");
+                    scanf("%d", &anno);
+                    visualizzaAutoPerAnno(lista, n, anno);
+                }
+            break;
+
+            // Uscita dal programma
+            case 8:
+            printf("Uscita in corso...\n");
+            uscita = 1;
+            break;
+
+            // Default in caso di errore
+            default: printf("Opzione non valida.\n");
+
+        }
+
+    } while(uscita == 0);
+
+    printf("\nFine programma.\n");
+
+    return 0;
+}
