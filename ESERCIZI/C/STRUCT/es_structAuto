@@ -59,7 +59,6 @@ void inserisciAuto(struct Auto lista[], int *n) {
     scanf("%s", lista[*n].targa);
 
     (*n)++;
-    printf("Auto inserita correttamente.\n");
 }
 
 // 2 Metodo per visualizzare le Auto col prezzo piu' basso e quello piu' alto
@@ -145,7 +144,7 @@ void cercaAutoPerTarga(struct Auto lista[], int n, char targa[]) {
     }
 }
 
-// 6 Metodo che mmostra la media dei prezzi delle auto
+// 6 Metodo che mostra la media dei prezzi delle auto
 void mediaPrezzi(struct Auto lista[], int n) {
     if (n == 0) {
         printf("Lista auto vuota.\n");
