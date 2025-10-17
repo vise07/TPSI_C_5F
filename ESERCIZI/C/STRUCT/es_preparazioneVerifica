@@ -1,0 +1,139 @@
+/*
+Esercizio – Preparazione verifica
+Scrivere un programma in C che dopo aver dichiarato una struttura denominata Persona con i
+seguenti campi: Nome, Cognome, età, codice fiscale, reddito annuo, anno_nascita,residenza(città) ;
+determini:
+1) La persona con reddito annuo più alto e quella con reddito annuo più basso.Visualizzare
+per entrambe: nome, cognome, città e reddito.
+2) Ordinare la lista delle persone in base all’anno di nascita** (dal più anziano al più
+giovane), e visualizzarla.
+3) Consentire all’utente di cercare una persona inserendo il codice fiscale..
+4) Visualizzare tutte le persone con reddito superiore o uguale a un valore scelto dall’utente.
+5) Calcolare la media dei redditi delle persone registrate nel sistema.
+6) Visualizzare tutte le persone nate in un anno specifico, scelto dall’utente;
+7) Visualizzare l&#39;elenco delle persone raggruppate per città di residenza, indicando per
+ciascuna città: Quante persone vi risiedono, L’età media dei residenti
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define MAX 50
+
+
+
+typedef struct { // Struct Persona
+  char nome[MAX];
+  char cognome[MAX];
+  int eta;
+  char codice_fiscale[16];
+  float reddito_annuo;
+  int anno_nascita;
+  char residenza[MAX];
+}Persona;
+
+
+
+void inserisciPersona(Persona elenco[], int n) { // Metodo per inserire persone
+    for(int i = 0; i < n; i++) {
+        printf("\n---Persona %d---\n", i + 1);
+        
+        printf("Nome: ");
+        scanf("%s", elenco[i].nome);
+        
+        printf("Cognome: ");
+        scanf("%s", elenco[i].cognome);
+        
+        printf("Eta': ");
+        scanf("%d", &elenco[i].eta);
+        
+        printf("Codice fiscale: ");
+        scanf("%s", elenco[i].codice_fiscale);
+        
+        printf("Reddito annuo: ");
+        scanf("%f", &elenco[i].reddito_annuo);
+        
+        printf("Anno di nascita: ");
+        scanf("%d", elenco[i].anno_nascita);
+        
+        printf("Residenza: ");
+        scanf("%s", elenco[i].residenza);
+    }
+}
+
+
+
+void visualizzaDettagli(Persona p) {
+    printf("Nome: %s - Cognome: %s - Residenza: %s - Reddito annuo: %.2f", p.nome, p.cognome, p.residenza, p.reddito_annuo);
+}
+
+
+
+void visualizzaMin(Persona elenco[], int n) {
+    int min = elenco[0].reddito_annuo;
+    int indice = 0;
+    for(int i = 0; i < n; i++) {
+        if(min > elenco[i].reddito_annuo) {
+            min = elenco[i].reddito_annuo;
+            indice = i;
+        }
+    }
+    visualizzaDettagli(elenco[indice]);
+}
+
+
+
+void visualizzaMax(Persona elenco[], int n) {
+    int max = elenco[0].reddito_annuo;
+    int indice = 0;
+    for(int i = 0; i < n; i++) {
+        if(max < elenco[i].reddito_annuo) {
+            max = elenco[i].reddito_annuo;
+            indice = i;
+        }
+    }
+    visualizzaDettagli(elenco[indice]);
+}
+
+
+
+
+void ordinaPersoneNascita(Persona elenco[], int n) {
+    Persona tmp;
+    for(int i = 0; i < n - 1; i++) {
+        for(int j = 0; j < n - 1; j++) {
+            if(elenco[j].anno_nascita < elenco[j + 1].anno_nascita) {
+                tmp.anno_nascita = elenco[j].anno_nascita;
+                elenco[j].anno_nascita = elenco[j + 1].anno_nascita;
+                elenco[j + 1].anno_nascita = tmp.anno_nascita;
+            }
+        }
+    }
+}
+
+
+
+
+int main() // Main
+{
+    int n;
+    printf("Inserisci il numero di persone da inserire:\n");
+    scanf("%d", &n);
+    Persona elenco[n];
+    
+    inserisciPersona(elenco, n);
+    
+    printf("Persona con reddito piu' basso: ");
+    visualizzaMin(elenco, n);
+    printf("Persona con reddito piu' alto: ");
+    visualizzaMax(elenco, n);
+    
+    ordinaPersoneNascita(elenco, n);
+    for(int i = 0; i < n; i++) {
+        visualizzaDettagli(elenco[i]);
+    }
+    
+    
+    
+    return 0;
+}
