@@ -22,19 +22,19 @@ ciascuna città: Quante persone vi risiedono, L’età media dei residenti
 
 
 
-typedef struct { // Struct Persona
-  char nome[MAX];
-  char cognome[MAX];
-  int eta;
-  char codice_fiscale[16];
-  float reddito_annuo;
-  int anno_nascita;
-  char residenza[MAX];
+typedef struct {
+    char nome[MAX];
+    char cognome[MAX];
+    int eta;
+    char codice_fiscale[16];
+    float reddito_annuo;
+    int anno_nascita;
+    char residenza[MAX];
 }Persona;
 
 
 
-void inserisciPersona(Persona elenco[], int n) { // Metodo per inserire persone
+void inserisciPersona(Persona elenco[], int n) {
     for(int i = 0; i < n; i++) {
         printf("\n---Persona %d---\n", i + 1);
         
@@ -54,86 +54,159 @@ void inserisciPersona(Persona elenco[], int n) { // Metodo per inserire persone
         scanf("%f", &elenco[i].reddito_annuo);
         
         printf("Anno di nascita: ");
-        scanf("%d", elenco[i].anno_nascita);
+        scanf("%d", &elenco[i].anno_nascita);
         
         printf("Residenza: ");
         scanf("%s", elenco[i].residenza);
+        
     }
 }
 
-
-
-void visualizzaDettagli(Persona p) {
-    printf("Nome: %s - Cognome: %s - Residenza: %s - Reddito annuo: %.2f", p.nome, p.cognome, p.residenza, p.reddito_annuo);
-}
-
-
-
-void visualizzaMin(Persona elenco[], int n) {
-    int min = elenco[0].reddito_annuo;
+int visualizzaMax(Persona elenco[], int n) {
+    float max = elenco[0].reddito_annuo;
     int indice = 0;
     for(int i = 0; i < n; i++) {
-        if(min > elenco[i].reddito_annuo) {
-            min = elenco[i].reddito_annuo;
-            indice = i;
-        }
-    }
-    visualizzaDettagli(elenco[indice]);
-}
-
-
-
-void visualizzaMax(Persona elenco[], int n) {
-    int max = elenco[0].reddito_annuo;
-    int indice = 0;
-    for(int i = 0; i < n; i++) {
-        if(max < elenco[i].reddito_annuo) {
+        if(elenco[i].reddito_annuo > max) {
             max = elenco[i].reddito_annuo;
             indice = i;
         }
     }
-    visualizzaDettagli(elenco[indice]);
+    return indice;
+}
+
+int visualizzaMin(Persona elenco[], int n) {
+    float min = elenco[0].reddito_annuo;
+    int indice = 0;
+    for(int i = 0; i < n; i++) {
+        if(elenco[i].reddito_annuo < min) {
+            min = elenco[i].reddito_annuo;
+            indice = i;
+        }
+    }
+    return indice;
+}
+
+void visualizzaDettagli(Persona p) {
+    printf("Nome: %s - Cognome: %s - Residenza: %s - Reddito annuo: %.2f\n", p.nome, p.cognome, p.residenza, p.reddito_annuo);
+}
+
+void visualizzaDettagliAnnoNascita(Persona p) {
+    printf("Nome: %s - Cognome: %s - Residenza: %s - Reddito annuo: %.2f - Anno nascita: %d\n", p.nome, p.cognome, p.residenza, p.reddito_annuo, p.anno_nascita);
+}
+
+void visualizzaDettagliCodiceFiscale(Persona p) {
+    printf("Nome: %s - Cognome: %s - Residenza: %s - Reddito annuo: %.2f - Codice fiscale: %s\n", p.nome, p.cognome, p.residenza, p.reddito_annuo, p.codice_fiscale);
 }
 
 
 
-
-void ordinaPersoneNascita(Persona elenco[], int n) {
+void ordinaElenco(Persona elenco[], int n) {
     Persona tmp;
     for(int i = 0; i < n - 1; i++) {
-        for(int j = 0; j < n - 1; j++) {
-            if(elenco[j].anno_nascita < elenco[j + 1].anno_nascita) {
-                tmp.anno_nascita = elenco[j].anno_nascita;
-                elenco[j].anno_nascita = elenco[j + 1].anno_nascita;
-                elenco[j + 1].anno_nascita = tmp.anno_nascita;
+        for(int j = 0; j < n - i - 1; j++) {
+            if(elenco[j].anno_nascita > elenco[j + 1].anno_nascita) {
+                tmp = elenco[j];
+                elenco[j] = elenco[j + 1];
+                elenco[j + 1] = tmp;
             }
         }
     }
 }
 
+int cercaPerCodiceFiscale(Persona elenco[], int n, char codice_fiscale[16]) {
+    int trovato = 0, indice = -1;
+    
+    for(int i = 0; i < n; i++) {
+        if(strcmp(elenco[i].codice_fiscale, codice_fiscale) == 0) {
+            printf("\nPersona trovata.\n");
+            trovato = 1;
+            indice = i;
+        }
+    }
+    
+    if(!trovato) {
+        printf("\nPersona NON trovata.\n");
+    }
+    
+    return indice;
+}
+
+void visualizzaPerRedditoMinimo(Persona elenco[], int n, float reddito_annuo_minimo) {
+    for(int i = 0; i < n; i++) {
+        if(elenco[i].reddito_annuo >= reddito_annuo_minimo) {
+            visualizzaDettagli(elenco[i]);
+        }
+    }
+}
+
+float calcolaMediaRedditi(Persona elenco[], int n) {
+    float media = 0, somma = 0;
+    
+    for(int i = 0; i < n; i++) {
+        somma += elenco[i].reddito_annuo;
+    }
+    
+    media = somma / n;
+    
+    return media;
+}
+
+void visualizzaPerAnnoNascita(Persona elenco[], int n, int anno_nascita) {
+    for(int i = 0; i < n; i++) {
+        if(elenco[i].anno_nascita == anno_nascita) {
+            visualizzaDettagliAnnoNascita(elenco[i]);
+        }
+    }
+}
 
 
 
-int main() // Main
+int main()
 {
     int n;
-    printf("Inserisci il numero di persone da inserire:\n");
+    printf("Inserisci il numero di persone: ");
     scanf("%d", &n);
+    
     Persona elenco[n];
     
     inserisciPersona(elenco, n);
     
-    printf("Persona con reddito piu' basso: ");
-    visualizzaMin(elenco, n);
-    printf("Persona con reddito piu' alto: ");
-    visualizzaMax(elenco, n);
+    printf("\nPersona con reddito annuo piu' alto:\n");
+    visualizzaDettagli(elenco[visualizzaMax(elenco, n)]);
     
-    ordinaPersoneNascita(elenco, n);
+    printf("\nPersona con reddito annuo piu' basso:\n");
+    visualizzaDettagli(elenco[visualizzaMin(elenco, n)]);
+    
+    ordinaElenco(elenco, n);
+    
+    printf("\nElenco persone ordinato per anno di nascita:\n");
     for(int i = 0; i < n; i++) {
-        visualizzaDettagli(elenco[i]);
+        visualizzaDettagliAnnoNascita(elenco[i]);
     }
     
+    char codice_fiscale[16];
+    printf("\nInserisci il codice fiscale da cercare:\n");
+    scanf("%s", codice_fiscale);
     
+    int scelta = cercaPerCodiceFiscale(elenco, n, codice_fiscale);
+    if(scelta != -1) {
+        visualizzaDettagliCodiceFiscale(elenco[scelta]);
+    }
     
+    float reddito_annuo_minimo;
+    printf("\nInserisci reddito annuo minimo:\n");
+    scanf("%f", &reddito_annuo_minimo);
+    
+    printf("\nPersone con reddito annuo minimo maggiore o uguale a quello inserito:\n");
+    visualizzaPerRedditoMinimo(elenco, n, reddito_annuo_minimo);
+    
+    printf("\nMedia dei redditi delle persone nell'elenco: %.2f\n", calcolaMediaRedditi(elenco, n));
+    
+    int anno_nascita;
+    printf("\nInserisci un anno di nascita per visualizzare le persone:\n");
+    scanf("%d", &anno_nascita);
+    
+    visualizzaPerAnnoNascita(elenco, n, anno_nascita);
+
     return 0;
 }
