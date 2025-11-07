@@ -47,21 +47,18 @@ int main()
     char str[DIM];
     char pari[DIM], dispari[DIM];
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // bind
     if (bind(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore nel bind");
         close(socketfd);
         exit(1);
     }
 
-    // ascolto richieste
     listen(socketfd, 10);
 
     for (;;) {
@@ -74,17 +71,14 @@ int main()
             continue;
         }
 
-        // ricezione della stringa
         read(soa, str, sizeof(str));
         printf("Stringa ricevuta: %s\n", str);
 
-        // separazione dei caratteri
         separa_pari_dispari(str, pari, dispari);
 
         printf("Stringa posizioni pari: %s\n", pari);
         printf("Stringa posizioni dispari: %s\n", dispari);
 
-        // invio al client
         write(soa, pari, sizeof(pari));
         write(soa, dispari, sizeof(dispari));
 
