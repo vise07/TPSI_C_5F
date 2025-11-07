@@ -45,21 +45,18 @@ int main()
     char carattere;
     int occorrenze;
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // bind
     if (bind(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore nel bind");
         close(socketfd);
         exit(1);
     }
 
-    // ascolto richieste
     listen(socketfd, 10);
 
     for (;;) {
@@ -72,17 +69,14 @@ int main()
             continue;
         }
 
-        // ricevo la stringa e il carattere
         read(soa, str, sizeof(str));
         read(soa, &carattere, sizeof(carattere));
 
         printf("Stringa ricevuta: %s\n", str);
         printf("Carattere ricevuto: %c\n", carattere);
 
-        // calcolo occorrenze
         occorrenze = conta_occorrenze(str, carattere);
 
-        // invio risultato al client
         write(soa, &occorrenze, sizeof(occorrenze));
 
         printf("Occorrenze inviate al client: %d\n", occorrenze);
