@@ -48,21 +48,18 @@ int main()
     char str[DIM];
     char risposta[DIM];
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // bind
     if (bind(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore nel bind");
         close(socketfd);
         exit(1);
     }
 
-    // ascolto richieste
     listen(socketfd, 10);
 
     for (;;) {
@@ -75,17 +72,15 @@ int main()
             continue;
         }
 
-        // leggo la stringa dal client
+
         read(soa, str, sizeof(str));
         printf("Stringa ricevuta: %s\n", str);
 
-        // controllo se è palindroma
         if (is_palindrome(str))
             strcpy(risposta, "La stringa e' palindroma");
         else
             strcpy(risposta, "La stringa non e' palindroma");
 
-        // invio risposta al client
         write(soa, risposta, sizeof(risposta));
 
         close(soa);
