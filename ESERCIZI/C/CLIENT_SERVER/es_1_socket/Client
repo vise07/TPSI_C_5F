@@ -30,14 +30,12 @@ int main(int argc,char** argv)
     char risposta[DIM];
     int socketfd;
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // connessione al server
     if (connect(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore connessione al server");
         close(socketfd);
