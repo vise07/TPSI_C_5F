@@ -33,7 +33,7 @@ void pulisci_stringa(char *dest, const char *src) {
     dest[j] = '\0';
 }
 
-// Funzione per ordinare alfabeticamente una stringa (bubble sort semplice)
+// Funzione per ordinare alfabeticamente una stringa (bubble sort)
 void ordina_stringa(char *str) {
     int n = strlen(str);
     for (int i = 0; i < n - 1; i++) {
@@ -59,21 +59,18 @@ int main()
     char str[DIM];
     char pulita[DIM];
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // bind
     if (bind(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore nel bind");
         close(socketfd);
         exit(1);
     }
 
-    // ascolto richieste
     listen(socketfd, 10);
 
     for (;;) {
@@ -86,19 +83,15 @@ int main()
             continue;
         }
 
-        // ricezione della stringa
         read(soa, str, sizeof(str));
         printf("Stringa ricevuta: %s\n", str);
 
-        // eliminazione caratteri speciali
         pulisci_stringa(pulita, str);
 
-        // ordinamento alfabetico
         ordina_stringa(pulita);
 
         printf("Stringa pulita e ordinata: %s\n", pulita);
 
-        // invio al client
         write(soa, pulita, sizeof(pulita));
 
         close(soa);
