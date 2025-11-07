@@ -26,19 +26,17 @@ int main(int argc, char** argv)
     servizio.sin_addr.s_addr = htonl(INADDR_ANY);
     servizio.sin_port = htons(SERVERPORT);
 
-    char str1[DIM];     // stringa da inviare
-    char pari[DIM];     // risposta con caratteri in posizione pari
-    char dispari[DIM];  // risposta con caratteri in posizione dispari
+    char str1[DIM];
+    char pari[DIM];
+    char dispari[DIM];
     int socketfd;
 
-    // creazione socket
     socketfd = socket(AF_INET, SOCK_STREAM, 0);
     if (socketfd < 0) {
         perror("Errore creazione socket");
         exit(1);
     }
 
-    // connessione al server
     if (connect(socketfd, (struct sockaddr*)&servizio, sizeof(servizio)) < 0) {
         perror("Errore connessione al server");
         close(socketfd);
@@ -48,10 +46,8 @@ int main(int argc, char** argv)
     printf("Inserisci la stringa: ");
     scanf("%s", str1);
 
-    // invio stringa al server
     write(socketfd, str1, sizeof(str1));
 
-    // ricezione delle due stringhe dal server
     read(socketfd, pari, sizeof(pari));
     read(socketfd, dispari, sizeof(dispari));
 
